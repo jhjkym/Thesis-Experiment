@@ -1,0 +1,51 @@
+# Python virtual environments
+.venv/
+venv/
+env/
+
+# Python and test/tool caches
+__pycache__/
+**/__pycache__/
+*.pyc
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.matplotlib-cache/
+.coverage
+htmlcov/
+
+# IDE and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Generated experiment outputs
+outputs/*
+!outputs/.gitkeep
+outputs/**/.matplotlib/
+
+# Local datasets (root-anchored so the Python source package remains tracked)
+/data/
+/datasets/
+*.npz
+*.npy
+*.h5
+*.hdf5
+
+# Training artifacts and logs
+checkpoints/
+weights/
+runs/
+logs/
+*.log
+*.pt
+*.pth
+*.ckpt
+*.onnx
+
+# Archives
+*.zip
+*.tar
+*.tar.gz

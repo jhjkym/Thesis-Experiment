@@ -1,0 +1,29 @@
+seed: 20260712
+
+scene:
+  width: 20.0
+  height: 15.0
+  sensor_position: [2.0, 7.5]
+
+trees:
+  count: 25
+  radius_range: [0.30, 0.65]
+  min_spacing: 0.30
+  max_attempts: 10000
+
+trajectory:
+  sample_rate_hz: 10.0
+  duration_seconds: 20.0
+  initial_position: [4.0, 2.5]
+  velocity: [0.45, 0.25]
+
+dataset:
+  history_steps: 20
+  future_steps: 20
+  num_samples: 100
+
+observation:
+  position_noise_std: 0.03
+  random_dropout_probability: 0.05
+
+output_directory: outputs/experiment_01
