@@ -1,0 +1,54 @@
+split_seeds:
+  train: 20261101
+  validation: 20261201
+  test: 20261301
+
+scene_counts:
+  train: 30
+  validation: 10
+  test: 10
+
+episodes_per_scene: 3
+
+scene:
+  width: 30.0
+  height: 20.0
+  sensor_margin: 1.0
+  sensor_tree_clearance: 0.5
+
+trees:
+  count: 16
+  radius_range: [0.30, 0.65]
+  min_spacing: 0.40
+  max_attempts: 10000
+
+trajectory:
+  sample_rate_hz: 10.0
+  duration_seconds: 7.9
+  initial_speed_range: [0.25, 0.70]
+  acceleration_magnitude_range: [0.02, 0.08]
+  turn_rate_magnitude_range: [0.08, 0.22]
+  stop_start_time_range: [2.0, 3.2]
+  stop_duration_range: [0.8, 1.2]
+  piecewise_turn_time_range: [2.0, 4.8]
+  piecewise_turn_angle_magnitude_range: [0.35, 1.00]
+  transition_duration_seconds: 1.0
+  boundary_margin: 0.15
+  min_tree_clearance: 0.20
+  max_speed: 1.20
+  max_acceleration: 1.50
+  max_attempts: 1000
+
+window:
+  history_steps: 20
+  future_steps: 20
+  window_stride: 5
+  minimum_visible_history_steps: 2
+  minimum_consecutive_visible_steps: 2
+  minimum_windows_per_episode: 3
+
+observation:
+  position_noise_std: 0.03
+  random_dropout_probability: 0.05
+
+output_directory: outputs/dataset_v2

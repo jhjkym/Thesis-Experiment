@@ -28,6 +28,7 @@ def generate_tree_trunks(
     min_spacing: float,
     sensor_position: Sequence[float],
     *,
+    sensor_clearance: float = 0.0,
     seed: Seed = None,
     rng: Optional[np.random.Generator] = None,
     max_attempts: int = 10000
@@ -36,8 +37,9 @@ def generate_tree_trunks(
 
     Scene coordinates span ``[0, width] x [0, height]``.  Every generated tree
     lies fully within the boundary, and the edge-to-edge distance between any
-    pair is at least ``min_spacing``.  The sensor may not lie inside or touch a
-    trunk.  Rejection sampling is deterministic for a fixed ``seed``.
+    pair is at least ``min_spacing``.  The distance from the sensor to every
+    trunk surface is at least ``sensor_clearance``.  Rejection sampling is
+    deterministic for a fixed ``seed``.
 
     Args:
         scene_size: ``(width, height)`` of the scene.
@@ -45,6 +47,9 @@ def generate_tree_trunks(
         radius_range: Inclusive lower/upper radius bounds.
         min_spacing: Required minimum edge-to-edge distance between trunks.
         sensor_position: Fixed sensor location as ``(x, y)``.
+        sensor_clearance: Required minimum distance from the sensor to each
+            trunk surface.  The default zero forbids a trunk from covering the
+            sensor while preserving compatibility with experiment 1.
         seed: Optional seed used to create a local random generator.
         rng: Optional existing NumPy ``Generator``.  Mutually exclusive with
             ``seed``.
@@ -90,6 +95,10 @@ def generate_tree_trunks(
     if np.any(sensor < 0.0) or np.any(sensor > size):
         raise ValueError("sensor_position must lie within the scene boundary")
 
+    clearance = float(sensor_clearance)
+    if not np.isfinite(clearance) or clearance < 0.0:
+        raise ValueError("sensor_clearance must be finite and non-negative")
+
     if isinstance(max_attempts, (bool, np.bool_)) or not isinstance(
         max_attempts, (int, np.integer)
     ):
@@ -121,8 +130,8 @@ def generate_tree_trunks(
             dtype=float,
         )
 
-        # Touching the sensor is forbidden, hence the strict acceptance test.
-        if float(np.linalg.norm(center - sensor)) <= radius:
+        sensor_surface_distance = float(np.linalg.norm(center - sensor)) - radius
+        if sensor_surface_distance < clearance:
             continue
 
         if placed:
@@ -138,7 +147,7 @@ def generate_tree_trunks(
     if placed != count:
         raise RuntimeError(
             "could place only {} of {} trunks after {} attempts; reduce tree_count, "
-            "radii, or min_spacing, or increase max_attempts".format(
+            "radii, min_spacing, or sensor_clearance, or increase max_attempts".format(
                 placed, count, attempt_limit
             )
         )
