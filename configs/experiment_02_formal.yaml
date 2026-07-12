@@ -1,0 +1,51 @@
+experiment:
+  name: experiment_02_formal
+  seeds: [20260201, 20260202, 20260203]
+
+dataset:
+  directory: outputs/dataset_v2_formal
+  train_split: train.npz
+  validation_split: validation.npz
+  test_split: test.npz
+
+output_directory: outputs/experiment_02_formal
+
+runtime:
+  torch_num_threads: 4
+  torch_num_interop_threads: 4
+
+normalization:
+  epsilon: 1.0e-6
+  fill_value: 0.0
+
+kalman_filter:
+  process_noise: 0.02
+  measurement_noise: 0.0009
+  initial_position_variance: 0.05
+  initial_velocity_variance: 0.25
+
+gru:
+  input_size: 7
+  hidden_size: 128
+  num_layers: 2
+  dropout: 0.2
+  future_steps: 20
+
+training:
+  epochs: 100
+  batch_size: 128
+  validation_batch_size: 256
+  learning_rate: 0.001
+  weight_decay: 1.0e-5
+  loss: smooth_l1
+  early_stopping_patience: 12
+  early_stopping_min_delta: 1.0e-5
+  gradient_clip_norm: 1.0
+  num_workers: 0
+
+evaluation:
+  batch_size: 256
+  runtime_warmup: 5
+  runtime_repeats: 30
+  trajectory_example_count: 8
+  default_statistical_unit: scene
